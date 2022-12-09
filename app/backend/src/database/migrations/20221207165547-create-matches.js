@@ -41,7 +41,7 @@ module.exports = {
       },
 
       awayTeamsGoals: {
-        field: 'away_teams_goals',
+        field: 'away_team_goals',
         type: Sequelize.INTEGER,
         allowNull: false
       },
