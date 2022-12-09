@@ -14,11 +14,8 @@ const verifyToken = (token: string) => {
   try {
     const { id } = verify(token, secret) as IToken;
     return id;
-  } catch (error) {
-    return {
-      statusCode: 401,
-      message: 'Token inválido',
-    };
+  } catch {
+    return false;
   }
 };
 

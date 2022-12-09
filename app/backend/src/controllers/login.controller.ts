@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import * as bcrypt from 'bcryptjs';
+import { IValidateUser } from '../interfaces/IValidateUser';
 import { IUser } from '../interfaces/IUser';
 
-import { createToken } from '../auth/JWT';
-import serviceLogin from '../services/login.service';
+import { createToken, verifyToken } from '../auth/JWT';
+import { serviceGetUserType, serviceLogin } from '../services/login.service';
 
 const controllerLogin = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -27,4 +28,17 @@ const controllerLogin = async (req: Request, res: Response) => {
   return res.status(200).json({ token });
 };
 
-export default controllerLogin;
+const controllerGetUserType = async (req: Request, res: Response) => {
+  const { authorization }: IValidateUser = req.headers;
+
+  if (authorization) {
+    const id = verifyToken(authorization);
+    const role = await serviceGetUserType(id);
+    return res.status(200).json({ role });
+  }
+};
+
+export {
+  controllerLogin,
+  controllerGetUserType,
+};

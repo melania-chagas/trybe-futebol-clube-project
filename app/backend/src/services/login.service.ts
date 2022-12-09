@@ -1,5 +1,4 @@
 import User from '../database/models/User';
-// import HttpException from '../utils/HttpException';
 
 const serviceLogin = async (email:string) => {
   const user = await User.findOne({
@@ -10,4 +9,18 @@ const serviceLogin = async (email:string) => {
   return user;
 };
 
-export default serviceLogin;
+const serviceGetUserType = async (id: unknown) => {
+  const user = await User.findOne(
+    { where: { id },
+      raw: true,
+    },
+  );
+  if (user) {
+    return user.role;
+  }
+};
+
+export {
+  serviceLogin,
+  serviceGetUserType,
+};
