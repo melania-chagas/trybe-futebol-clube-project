@@ -8,6 +8,7 @@ import Team from '../database/models/Team';
 
 import { Response } from 'superagent';
 import teamsMock from './mocks/teamsMock';
+import teamMock from './mocks/teamMock';
 
 chai.use(chaiHttp);
 
@@ -35,4 +36,27 @@ describe('Testes acerca da rota /teams', () => {
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.be.deep.equal(teamsMock);
   });
+
 });
+
+describe('Testes acerca da rota /teams/:id', () => {
+  let chaiHttpResponse: Response;
+
+  beforeEach(async () => {
+    sinon.stub(Team, 'findOne').resolves(teamMock as Team);
+  })
+
+  afterEach(() => {
+    (Team.findOne as sinon.SinonStub).restore();
+  })
+
+  it('Verifica se é possível buscar um time pelo id', async () => {
+    chaiHttpResponse = await chai
+      .request(app)
+      .get('/teams/1');
+
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.be.deep.equal(teamMock);
+  });
+
+})
