@@ -9,4 +9,15 @@ const serviceGetAllTeams = async (): Promise<IServiceGetAllTeams> => {
   };
 };
 
-export default serviceGetAllTeams;
+const serviceGetTeamById = async (id: number) => {
+  const team = await Team.findOne({ where: { id } });
+  return {
+    statusCode: 200,
+    message: team,
+  };
+};
+
+export {
+  serviceGetAllTeams,
+  serviceGetTeamById,
+};
