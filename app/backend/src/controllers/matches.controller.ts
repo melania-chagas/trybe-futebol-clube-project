@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
+import { IResult } from '../interfaces/IResult';
 import { verifyToken } from '../auth/JWT';
 import {
   serviceGetAllInProgress,
   serviceGetAllMatchesNoFilter,
   serviceSaveMatches,
+  serviceUpdateProgress,
 } from '../services/maches.service';
 
 const controllerGetAllMatchesNoFilter = async (_req: Request, res: Response): Promise<Response> => {
@@ -35,8 +37,16 @@ const controllerSaveMatches = async (req: Request, res: Response) => {
   return res.status(statusCode).json(message);
 };
 
+const controllerUpdateProgress = async (req: Request, res: Response): Promise<Response> => {
+  const { id } = req.params;
+  const { statusCode, message } = await serviceUpdateProgress(Number(id)) as IResult;
+
+  return res.status(statusCode).json({ message });
+};
+
 export {
   controllerGetAllMatches,
   controllerGetAllInProgress,
   controllerSaveMatches,
+  controllerUpdateProgress,
 };

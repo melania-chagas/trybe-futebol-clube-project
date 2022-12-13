@@ -47,8 +47,22 @@ const serviceSaveMatches = async (newMatch: IMatch) => {
   };
 };
 
+const serviceUpdateProgress = async (id: number) => {
+  const [result] = await Matches.update(
+    { inProgress: false },
+    { where: { id } },
+  );
+  if (result) {
+    return {
+      statusCode: 200,
+      message: 'Finished',
+    };
+  }
+};
+
 export {
   serviceGetAllMatchesNoFilter,
   serviceGetAllInProgress,
   serviceSaveMatches,
+  serviceUpdateProgress,
 };
