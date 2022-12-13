@@ -1,3 +1,4 @@
+import { IMatch } from '../interfaces/IMatch';
 import Matches from '../database/models/Matches';
 import Team from '../database/models/Team';
 
@@ -30,7 +31,24 @@ const serviceGetAllInProgress = async (inProgressStatus: string) => {
   };
 };
 
+const serviceSaveMatches = async (newMatch: IMatch) => {
+  const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = newMatch;
+  const result = await Matches.create({
+    homeTeam,
+    awayTeam,
+    homeTeamGoals,
+    awayTeamGoals,
+    inProgress: true,
+  });
+
+  return {
+    statusCode: 201,
+    message: result,
+  };
+};
+
 export {
   serviceGetAllMatchesNoFilter,
   serviceGetAllInProgress,
+  serviceSaveMatches,
 };

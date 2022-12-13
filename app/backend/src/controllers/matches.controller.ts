@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
-import { serviceGetAllInProgress, serviceGetAllMatchesNoFilter } from '../services/maches.service';
+import { verifyToken } from '../auth/JWT';
+import {
+  serviceGetAllInProgress,
+  serviceGetAllMatchesNoFilter,
+  serviceSaveMatches,
+} from '../services/maches.service';
 
 const controllerGetAllMatchesNoFilter = async (_req: Request, res: Response): Promise<Response> => {
   const { statusCode, message } = await serviceGetAllMatchesNoFilter();
@@ -19,7 +24,19 @@ const controllerGetAllMatches = async (req: Request, res: Response) => {
   return controllerGetAllMatchesNoFilter(req, res);
 };
 
+const controllerSaveMatches = async (req: Request, res: Response) => {
+  const newMatch = req.body;
+  const { authorization } = req.headers;
+  if (authorization) {
+    verifyToken(authorization);
+  }
+
+  const { statusCode, message } = await serviceSaveMatches(newMatch);
+  return res.status(statusCode).json(message);
+};
+
 export {
   controllerGetAllMatches,
   controllerGetAllInProgress,
+  controllerSaveMatches,
 };
