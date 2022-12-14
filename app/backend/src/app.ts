@@ -5,6 +5,7 @@ import matchesRouter from './routes/maches.route';
 
 import 'express-async-errors';
 import httpErrorMiddleware from './middlewares/http.middleware';
+import leaderboardRouter from './routes/leaderboard.router';
 
 class App {
   public app: express.Express;
@@ -32,6 +33,7 @@ class App {
     this.app.use('/login', loginRouter);
     this.app.use('/teams', teamsRouter);
     this.app.use('/matches', matchesRouter);
+    this.app.use('/leaderboard', leaderboardRouter);
     this.app.use(httpErrorMiddleware);
   }
 
