@@ -8,7 +8,7 @@ import App from '../app';
 import { Response } from 'superagent';
 
 import Matches from '../database/models/Matches';
-import {matchesMock, matchesInProgressMock} from './mocks/matchesMock';
+import {matchesMock, matchesInProgressMock, equalTeamsMock} from './mocks/matchesMock';
 
 chai.use(chaiHttp);
 
@@ -49,4 +49,37 @@ describe('Testes acerca da rota /maches', () => {
 
     expect(chaiHttpResponse.body).to.be.deep.equal(matchesInProgressMock);
   })
+
+  it('Verifica se ao tentar inserir uma partida com times iguais retorna um status 422 com uma mensagem de erro ', async () => {
+    const { body } = await chai.request(app).post('/login').send({
+      "email": "admin@admin.com",
+      "password": "secret_admin"
+    });
+
+    await chai
+    .request(app)
+    .post('/matches')
+    .send(equalTeamsMock)
+    .set('Authorization', body.token)
+    .then((res) => {
+      expect(res.status).to.be.equal(422);
+      expect(res.body).to.be.deep.equal({ message: 'It is not possible to create a match with two equal teams'})
+    });
+  })
+
+  it('Verifica se é possível atualizar uma partida', async () => {
+    await chai
+    .request(app)
+    .patch('/matches/18')
+    .send({
+      "homeTeamGoals": 5,
+      "awayTeamGoals": 2
+    })
+    .then((res) => {
+      expect(res.status).to.be.equal(200);
+      expect(res.body).to.be.deep.equal({ message: 'Update completed' })
+    })
+  })
+
+
 });

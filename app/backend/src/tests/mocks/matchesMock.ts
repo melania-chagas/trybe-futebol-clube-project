@@ -209,8 +209,20 @@ const matchMock = {
   inProgress: true,
 }
 
+const equalTeamsMock = {
+  homeTeam: 8,
+  awayTeam: 8,
+}
+
+const teamsMock = {
+  homeTeam: 5,
+  awayTeam: 8,
+}
+
 export {
   matchesMock,
   matchesInProgressMock,
   matchMock,
+  equalTeamsMock,
+  teamsMock,
 };
