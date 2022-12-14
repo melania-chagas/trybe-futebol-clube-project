@@ -109,7 +109,7 @@ describe('Testes acerca da rota /login', () => {
       .post('/login')
       .send({
         email: "example@example.com",
-        password: "pass"
+        password: "p"
       });
 
     expect(chaiHttpResponse.status).to.be.equal(401);

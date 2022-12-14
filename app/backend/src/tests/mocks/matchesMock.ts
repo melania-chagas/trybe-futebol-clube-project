@@ -219,10 +219,16 @@ const teamsMock = {
   awayTeam: 8,
 }
 
+const loginMock = {
+  "email": "admin@admin.com",
+  "password": "secret_admin"
+}
+
 export {
   matchesMock,
   matchesInProgressMock,
   matchMock,
   equalTeamsMock,
   teamsMock,
+  loginMock,
 };

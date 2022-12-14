@@ -8,7 +8,7 @@ import App from '../app';
 import { Response } from 'superagent';
 
 import Matches from '../database/models/Matches';
-import {matchesMock, matchesInProgressMock, equalTeamsMock} from './mocks/matchesMock';
+import {matchesMock, matchesInProgressMock, equalTeamsMock, teamsMock, loginMock} from './mocks/matchesMock';
 
 chai.use(chaiHttp);
 
@@ -51,10 +51,10 @@ describe('Testes acerca da rota /maches', () => {
   })
 
   it('Verifica se ao tentar inserir uma partida com times iguais retorna um status 422 com uma mensagem de erro ', async () => {
-    const { body } = await chai.request(app).post('/login').send({
-      "email": "admin@admin.com",
-      "password": "secret_admin"
-    });
+    const { body } = await chai
+    .request(app)
+    .post('/login')
+    .send(loginMock);
 
     await chai
     .request(app)
@@ -68,18 +68,33 @@ describe('Testes acerca da rota /maches', () => {
   })
 
   it('Verifica se é possível atualizar uma partida', async () => {
-    await chai
+    sinon.stub(Matches, "update")
+      .resolves([1] as [affectedCount: number]);
+
+    chaiHttpResponse = (await chai
+      .request(app)
+      .patch('/matches/1')
+      .send(teamsMock));
+
+    expect(chaiHttpResponse.status).to.be.equals(200);
+    expect(chaiHttpResponse.body).to.be.deep.equal({ message:'Update completed'});
+
+    (Matches.update as sinon.SinonStub).restore();
+  });
+
+  it('Verifica se é possível atualizar o \'inProgress\' de uma partida para \'false\'', async () => {
+    sinon
+      .stub(Matches, "update")
+      .resolves();
+
+    chaiHttpResponse = await chai
     .request(app)
-    .patch('/matches/18')
-    .send({
-      "homeTeamGoals": 5,
-      "awayTeamGoals": 2
-    })
-    .then((res) => {
-      expect(res.status).to.be.equal(200);
-      expect(res.body).to.be.deep.equal({ message: 'Update completed' })
-    })
-  })
+    .patch('/matches/1/finish');
 
+    expect(chaiHttpResponse.status).to.be.equals(200);
+    expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'Finished' });
 
+    (Matches.update as sinon.SinonStub).restore();
+  });
+  
 });
