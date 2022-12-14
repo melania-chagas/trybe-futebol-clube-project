@@ -5,6 +5,7 @@ import {
   serviceGetAllInProgress,
   serviceGetAllMatchesNoFilter,
   serviceSaveMatches,
+  serviceUpdateMatchResult,
   serviceUpdateProgress,
 } from '../services/maches.service';
 
@@ -44,9 +45,21 @@ const controllerUpdateProgress = async (req: Request, res: Response): Promise<Re
   return res.status(statusCode).json({ message });
 };
 
+const controllerUpdateMatchResult = async (req: Request, res: Response): Promise<Response> => {
+  const { id } = req.params;
+  const currentResult = req.body;
+
+  const result = await serviceUpdateMatchResult(Number(id), currentResult);
+  if (result) {
+    return res.status(200).json({ message: 'Update completed' });
+  }
+  return res.status(500).json({ message: 'Update not completed' });
+};
+
 export {
   controllerGetAllMatches,
   controllerGetAllInProgress,
   controllerSaveMatches,
   controllerUpdateProgress,
+  controllerUpdateMatchResult,
 };

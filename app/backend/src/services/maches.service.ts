@@ -1,3 +1,4 @@
+import { IResultMatch } from '../interfaces/IResultMatch';
 import { IMatch } from '../interfaces/IMatch';
 import Matches from '../database/models/Matches';
 import Team from '../database/models/Team';
@@ -60,9 +61,23 @@ const serviceUpdateProgress = async (id: number) => {
   }
 };
 
+const serviceUpdateMatchResult = async (id: number, currentResult: IResultMatch) => {
+  const { homeTeamGoals, awayTeamGoals } = currentResult;
+  const [result] = await Matches.update(
+    {
+      homeTeamGoals,
+      awayTeamGoals,
+    },
+    { where: { id } },
+  );
+
+  return result;
+};
+
 export {
   serviceGetAllMatchesNoFilter,
   serviceGetAllInProgress,
   serviceSaveMatches,
   serviceUpdateProgress,
+  serviceUpdateMatchResult,
 };
