@@ -49,6 +49,4 @@ describe('Testes acerca da rota /maches', () => {
 
     expect(chaiHttpResponse.body).to.be.deep.equal(matchesInProgressMock);
   })
-
-  
 });

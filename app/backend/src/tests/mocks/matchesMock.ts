@@ -200,7 +200,17 @@ const matchesInProgressMock = [
   }
 ]
 
+const matchMock = {
+  id: 47,
+  homeTeam: 8,
+  homeTeamGoals: 1,
+  awayTeam: 14,
+  awayTeamGoal: 2,
+  inProgress: true,
+}
+
 export {
   matchesMock,
   matchesInProgressMock,
+  matchMock,
 };
