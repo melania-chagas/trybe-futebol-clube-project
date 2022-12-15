@@ -3,7 +3,6 @@ import { verifyToken } from '../auth/JWT';
 
 const tokenValidation = async (req: Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
-  console.log(authorization);
 
   let statusToken;
 

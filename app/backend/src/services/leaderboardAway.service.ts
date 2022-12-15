@@ -30,7 +30,7 @@ const clearStats = () => {
 };
 
 const getStats = (match: Matches) => {
-  const result = match.homeTeamGoals - match.awayTeamGoals;
+  const result = match.awayTeamGoals - match.homeTeamGoals;
   if (result > 0) {
     stats.totalVictories += 1;
     stats.totalPoints += 3;
@@ -41,8 +41,8 @@ const getStats = (match: Matches) => {
     stats.totalLosses += 1;
   }
 
-  stats.goalsFavor += match.homeTeamGoals;
-  stats.goalsOwn += match.awayTeamGoals;
+  stats.goalsFavor += match.awayTeamGoals;
+  stats.goalsOwn += match.homeTeamGoals;
   stats.goalsBalance += result;
 };
 
@@ -52,14 +52,14 @@ const sortFunction = (a: any, b: any) => b.totalPoints - a.totalPoints
 || b.goalsFavor - a.goalsFavor
 || a.goalsOwn - b.goalsOwn;
 
-const serviceGetLeaderboard = async () => {
+const serviceGetLeaderboardAway = async () => {
   const allTeams = await Team.findAll({
-    include: [{ model: Matches, as: 'homeTeam', where: { inProgress: false } }],
+    include: [{ model: Matches, as: 'awayTeam', where: { inProgress: false } }],
   });
   const leaderboard = allTeams.map((team) => {
     clearStats();
     stats.name = team.teamName;
-    team.homeTeam.forEach((match: any) => {
+    team.awayTeam.forEach((match: any) => {
       stats.totalGames += 1;
       getStats(match);
       stats.efficiency = ((stats.totalPoints / (stats.totalGames * 3)) * 100).toFixed(2);
@@ -70,4 +70,4 @@ const serviceGetLeaderboard = async () => {
   return leaderboard;
 };
 
-export default serviceGetLeaderboard;
+export default serviceGetLeaderboardAway;
