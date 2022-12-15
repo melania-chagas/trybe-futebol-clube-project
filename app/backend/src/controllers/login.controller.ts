@@ -36,6 +36,7 @@ const controllerGetUserType = async (req: Request, res: Response) => {
     const role = await serviceGetUserType(id);
     return res.status(200).json({ role });
   }
+  return res.status(403).json({ message: 'Token inválido' });
 };
 
 export {

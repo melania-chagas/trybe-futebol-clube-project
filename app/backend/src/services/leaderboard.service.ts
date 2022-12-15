@@ -31,7 +31,6 @@ const clearStats = () => {
 
 const getStats = (match: Matches) => {
   const result = match.homeTeamGoals - match.awayTeamGoals;
-  // console.log(result);
   if (result > 0) {
     stats.totalVictories += 1;
     stats.totalPoints += 3;
@@ -55,11 +54,8 @@ const sortFunction = (a: any, b: any) => b.totalPoints - a.totalPoints
 
 const serviceGetLeaderboard = async () => {
   const allTeams = await Team.findAll({
-    include: [
-      { model: Matches, as: 'homeTeam' },
-    ],
+    include: [{ model: Matches, as: 'homeTeam', where: { inProgress: false } }],
   });
-
   const leaderboard = allTeams.map((team) => {
     clearStats();
     stats.name = team.teamName;
